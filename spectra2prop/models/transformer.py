@@ -5,7 +5,7 @@ class SpectraTransformer(nn.Module):
     def __init__(self, input_dim=100, d_model=64, nhead=4, num_layers=2, output_dim=1):
         super(SpectraTransformer, self).__init__()
         self.embedding = nn.Linear(input_dim, d_model)
-        encoder_layer = nn.TransformerEncoderLayer(d_model=d_model, nhead=nhead)
+        encoder_layer = nn.TransformerEncoderLayer(d_model=d_model, nhead=nhead, batch_first=True)
         self.transformer_encoder = nn.TransformerEncoder(encoder_layer, num_layers=num_layers)
         self.fc = nn.Linear(d_model, output_dim)
 
