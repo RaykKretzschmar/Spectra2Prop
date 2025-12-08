@@ -11,8 +11,8 @@ class SpectraTransformer(nn.Module):
 
             def forward(self, x):
                             x = self.embedding(x)
-                            if x.dim() == 2:
-                   x = x.unsqueeze(1)
-                           x = self.transformer_encoder(x)
+        if x.dim() == 2:
+            x = x.unsqueeze(1)
+        x = self.transformer_encoder(x)
         x = x.mean(dim=1)
         return self.fc(x)
