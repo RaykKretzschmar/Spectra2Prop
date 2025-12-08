@@ -104,4 +104,4 @@ class TestMGFDataset(unittest.TestCase):
         self.assertAlmostEqual(item['intensity'][0].item(), 80.0, places=4)
 
 if __name__ == '__main__':
-    unittest.main
+    unittest.main()
