@@ -1,10 +1,9 @@
-from torch.utils.data import DataLoader
-
-import unittest
-import torch
 import os
 import tempfile
-# Ensure this import path matches your project structure
+import unittest
+
+import torch
+from torch.utils.data import DataLoader
 from spectra2prop.data.dataloader import MGFDataset, collate_fn
 
 class TestMGFDataset(unittest.TestCase):
