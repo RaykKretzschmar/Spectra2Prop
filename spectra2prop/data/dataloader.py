@@ -32,14 +32,15 @@ class MGFDataset(Dataset):
             'intensity': torch.tensor(intensity, dtype=torch.float32)
         }
 
-    mz_list = [item['mz'] for item in batch]
-    intensity_list = [item['intensity'] for item in batch]
-    
-    # Pad sequences
-    mz_padded = torch.nn.utils.rnn.pad_sequence(mz_list, batch_first=True, padding_value=0.0)
-    intensity_padded = torch.nn.utils.rnn.pad_sequence(intensity_list, batch_first=True, padding_value=0.0)
-    
-    return {
-        'mz': mz_padded,
-        'intensity': intensity_padded
-    }
+def collate_fn(batch):    
+        mz_list = [item['mz'] for item in batch]
+        intensity_list = [item['intensity'] for item in batch]
+        
+        # Pad sequences
+        mz_padded = torch.nn.utils.rnn.pad_sequence(mz_list, batch_first=True, padding_value=0.0)
+        intensity_padded = torch.nn.utils.rnn.pad_sequence(intensity_list, batch_first=True, padding_value=0.0)
+        
+        return {
+            'mz': mz_padded,
+            'intensity': intensity_padded
+        }
