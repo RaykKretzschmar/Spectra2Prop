@@ -1,3 +1,6 @@
+import torch
+from torch.utils.data import DataLoader
+
 import unittest
 import torch
 import os
