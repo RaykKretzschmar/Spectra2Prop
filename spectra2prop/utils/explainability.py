@@ -122,5 +122,6 @@ class GradCAM1D:
 
     def remove_hooks(self):
         """Manually remove hooks if necessary to free memory."""
-        # Note: In a production setting, you might store hook handles to call .remove()
-        pass
+                for handle in self.handles:
+            handle.remove()
+                self.handles = []
