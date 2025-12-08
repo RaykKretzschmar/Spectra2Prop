@@ -115,8 +115,11 @@ class GradCAM1D:
 
         # 7. Normalize (Optional but recommended for visualization)
         if normalize:
-            if heatmap.max() > 0: # Avoid division by zero
+            if heatmap.max() - heatmap.min() > 0:  # Avoid division by zero for uniform heatmap
                 heatmap = (heatmap - heatmap.min()) / (heatmap.max() - heatmap.min())
+            else:
+                # If uniform, set to zeros (or ones, depending on desired behavior)
+                heatmap = np.zeros_like(heatmap)
         
         return heatmap
 
