@@ -4,7 +4,6 @@ import unittest
 import torch
 import os
 import tempfile
-import numpy as np
 # Ensure this import path matches your project structure
 from spectra2prop.data.dataloader import MGFDataset, collate_fn
 
