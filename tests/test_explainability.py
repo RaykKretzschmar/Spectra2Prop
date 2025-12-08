@@ -88,12 +88,11 @@ class TestGradCAM1D(unittest.TestCase):
         self.assertLessEqual(heatmap.max(), 1.0 + 1e-6)
 
     def test_hooks_registration(self):
-        """T        # Check if handles are stored
-        self.assertTrue(len(grad_cam.handles) > 0, "Hooks handles not stored")_cam = GradCAM1D(self.model)
+        """Test that hooks are registered correctly."""        self.assertTrue(len(grad_cam.handles) > 0, "Hooks handles not stored")_cam = GradCAM1D(self.model)
 
 
     def test_remove_hooks_api(self):
-        """Test if the remove_hooks method runs without error."""
+        ""Test if the remove_hooks method runs without error."""
         grad_cam = GradCAM1D(self.model)
         try:
             grad_cam.remove_hooks()
