@@ -26,6 +26,7 @@ class GradCAM1D:
         # Placeholders for hooks
         self.gradients = None
         self.activations = None
+        self.handles = []
 
         # Automatically find the last Conv1d layer if not specified
         if self.target_layer is None:
@@ -56,9 +57,8 @@ class GradCAM1D:
 
     def _register_hooks(self):
         """Registers the forward and backward hooks on the target layer."""
-        self.target_layer.register_forward_hook(self._save_activation)
-        # regifull_backward_hook is preferred in newer PyTorch versions
-                self.target_layer.register_backward_hook
+        self.handles.append(self.target_layer.register_forward_hook(self._save_activation))
+        self.handles.append(self.target_layer.register_full_backward_hook(self._save_gradient))
 
     def generate_heatmap(self, input_tensor, target_class_idx=None, normalize=True):
         """
@@ -122,6 +122,6 @@ class GradCAM1D:
 
     def remove_hooks(self):
         """Manually remove hooks if necessary to free memory."""
-                for handle in self.handles:
+        for handle in self.handles:
             handle.remove()
-self.handles = []
+        self.handles = []
