@@ -17,12 +17,12 @@ class TestSpectraTransformer(unittest.TestCase):
         num_layers = 2
         output_dim = 1
                                                             
-        model = SpectraTransformer(input_dim, d_model, nhead, num_layers, output_dim)
-                                                                            
+        model = SpectraTransformer(num_bins=input_dim, num_classes=output_dim, d_model=d_model, nhead=nhead, num_layers=num_layers)
+        
         batch_size = 2
-        # Create dummy input: (batch_size, sequence_length=1, input_dim)
+        # Create dummy input: (batch_size, sequence_length=1, input_dim) -> (batch_size, 1, input_dim)
         dummy_input = torch.randn(batch_size, 1, input_dim)
-                                                                                                            
+        
         output = model(dummy_input)
                                                                                                                             
         # Expected output shape: (batch_size, output_dim)
