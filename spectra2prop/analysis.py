@@ -74,7 +74,9 @@ def plot_predicted_vs_actual(predictions, targets, save_path=None, title='Predic
     
     if save_path:
         # Ensure directory exists
-        os.makedirs(os.path.dirname(save_path), exist_ok=True)
+        dir_path = os.path.dirname(save_path)
+        if dir_path:
+            os.makedirs(dir_path, exist_ok=True)
         plt.savefig(save_path, dpi=300)
         print(f"Plot saved to {save_path}")
         plt.close()
