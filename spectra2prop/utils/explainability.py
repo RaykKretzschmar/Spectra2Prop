@@ -57,8 +57,8 @@ class GradCAM1D:
     def _register_hooks(self):
         """Registers the forward and backward hooks on the target layer."""
         self.target_layer.register_forward_hook(self._save_activation)
-        # register_full_backward_hook is preferred in newer PyTorch versions
-        self.target_layer.register_full_backward_hook(self._save_gradient)
+        # regifull_backward_hook is preferred in newer PyTorch versions
+                self.target_layer.register_backward_hook
 
     def generate_heatmap(self, input_tensor, target_class_idx=None, normalize=True):
         """
@@ -124,4 +124,4 @@ class GradCAM1D:
         """Manually remove hooks if necessary to free memory."""
                 for handle in self.handles:
             handle.remove()
-                self.handles = []
+self.handles = []
