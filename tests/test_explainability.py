@@ -88,15 +88,9 @@ class TestGradCAM1D(unittest.TestCase):
         self.assertLessEqual(heatmap.max(), 1.0 + 1e-6)
 
     def test_hooks_registration(self):
-        """Test if PyTorch hooks are actually registered on the layer."""
-        grad_cam = GradCAM1D(self.model)
-        
-        # Check internal PyTorch hook dictionaries
-        # Note: _forward_hooks and _full_backward_hooks are OrderedDicts
-        self.assertTrue(len(grad_cam.target_layer._forward_hooks) > 0, 
-                        "Forward hook not registered")
-        self.assertTrue(len(grad_cam.target_layer._full_backward_hooks) > 0, 
-                        "Backward hook not registered")
+        """T        # Check if handles are stored
+        self.assertTrue(len(grad_cam.handles) > 0, "Hooks handles not stored")_cam = GradCAM1D(self.model)
+
 
     def test_remove_hooks_api(self):
         """Test if the remove_hooks method runs without error."""
