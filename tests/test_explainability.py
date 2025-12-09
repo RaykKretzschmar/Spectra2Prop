@@ -90,7 +90,7 @@ class TestGradCAM1D(unittest.TestCase):
     def test_hooks_registration(self):
         """Test that hooks are registered correctly."""        
         grad_cam = GradCAM1D(self.model)
-        self.assertTrue(len(grad_cam.handles) > 0, "Hooks handles not stored")
+        self.assertEqual(len(grad_cam.handles), 2, "Expected exactly 2 hooks (forward and backward) to be registered")
 
 
     def test_remove_hooks_api(self):
