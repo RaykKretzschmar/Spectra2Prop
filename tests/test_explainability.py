@@ -87,6 +87,27 @@ class TestGradCAM1D(unittest.TestCase):
         # Allow small floating point tolerance
         self.assertLessEqual(heatmap.max(), 1.0 + 1e-6)
 
+    def test_heatmap_automatic_class_selection(self):
+        """Test if generate_heatmap works with target_class_idx=None (automatic selection)."""
+        grad_cam = GradCAM1D(self.model)
+        
+        # Get model output to determine expected class
+        with torch.no_grad():
+            output = self.model(self.input_tensor)
+            expected_class = output.argmax(dim=1).item()
+        
+        # Generate heatmap with automatic class selection
+        heatmap = grad_cam.generate_heatmap(self.input_tensor, target_class_idx=None)
+        
+        # Check that heatmap is generated successfully
+        self.assertIsInstance(heatmap, np.ndarray)
+        self.assertEqual(heatmap.shape, (self.input_len,))
+        
+        # Verify that the automatic selection used the highest scoring class
+        # by comparing with explicit class selection
+        heatmap_explicit = grad_cam.generate_heatmap(self.input_tensor, target_class_idx=expected_class)
+        np.testing.assert_array_almost_equal(heatmap, heatmap_explicit, decimal=5)
+
     def test_hooks_registration(self):
         """Test that hooks are registered correctly."""        
         grad_cam = GradCAM1D(self.model)
