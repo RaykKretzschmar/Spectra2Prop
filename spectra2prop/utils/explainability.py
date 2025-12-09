@@ -76,15 +76,15 @@ class GradCAM1D:
         
         # 1. Forward pass
         # The hooks will capture self.activations here
-        output = self.model(input_tensor)
+        logits, _ = self.model(input_tensor)
 
         # Determine target class
         if target_class_idx is None:
-            target_class_idx = output.argmax(dim=1).item()
+            target_class_idx = logits.argmax(dim=1).item()
 
         # 2. Backward pass
         # Create a one-hot target tensor to backpropagate specific class score
-        target_score = output[:, target_class_idx]
+        target_score = logits[:, target_class_idx]
         target_score.backward(retain_graph=True)
 
         # 3. Compute Weights
