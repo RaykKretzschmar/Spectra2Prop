@@ -94,12 +94,9 @@ class TestGradCAM1D(unittest.TestCase):
 
 
     def test_remove_hooks_api(self):
-        """Test if the remove_hooks method runs without error."""
+        """Test if the remove_hooks method actually removes all hooks."""
         grad_cam = GradCAM1D(self.model)
-        try:
-            grad_cam.remove_hooks()
-        except Exception as e:
-            self.fail(f"remove_hooks() raised {type(e).__name__} unexpectedly!")
-
+        grad_cam.remove_hooks()
+        self.assertEqual(len(grad_cam.handles), 0, "Hooks were not properly removed")
 if __name__ == '__main__':
     unittest.main()
