@@ -55,6 +55,7 @@ class TestMGFDataset(unittest.TestCase):
         # Spectrum 2 (index 1) has length 3. It should be [True, True, True]
         expected_mask_2 = torch.tensor([True, True, True])
         self.assertTrue(torch.equal(batch['mask'][1], expected_mask_2))
+        dataset.close()
 
     def test_data_integrity_and_padding(self):
         """
@@ -74,6 +75,7 @@ class TestMGFDataset(unittest.TestCase):
         # Check Spectrum 2 (Long): Should be [150.0, 250.0, 350.0]
         expected_mz_2 = torch.tensor([150.0, 250.0, 350.0])
         self.assertTrue(torch.allclose(batch['mz'][1], expected_mz_2))
+        dataset.close()
 
     def test_top_k_filtering_logic(self):
         """
@@ -100,6 +102,7 @@ class TestMGFDataset(unittest.TestCase):
         self.assertAlmostEqual(item['mz'][0].item(), 250.0, places=4, 
                                msg="Failed to select the peak with highest intensity.")
         self.assertAlmostEqual(item['intensity'][0].item(), 80.0, places=4)
+        dataset.close()
 
 if __name__ == '__main__':
     unittest.main()

@@ -49,6 +49,9 @@ class MGFDataset(Dataset):
         # Restore state in worker process
         self.__dict__.update(state)
         self.reader = mgf.IndexedMGF(self.mgf_file)
+    
+    def close(self):
+        self.reader.close()
 
 def collate_fn(batch):    
     mz_list = [item['mz'] for item in batch]
