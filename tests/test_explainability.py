@@ -25,8 +25,9 @@ class DummySpectralCNN(nn.Module):
         x = self.relu(self.conv2(x))
         x = self.gap(x)
         x = x.view(x.size(0), -1)
-        x = self.fc(x)
-        return x
+        embedding = x  # Save embedding before final layer
+        logits = self.fc(x)
+        return logits, embedding  # Return tuple to match real model
 
 class NoConvModel(nn.Module):
     """A model with no Conv1d layers to test error handling."""
@@ -107,6 +108,8 @@ class TestGradCAM1D(unittest.TestCase):
         # Get model output to determine expected class
         with torch.no_grad():
             output = self.model(self.input_tensor)
+            if isinstance(output, tuple):
+                output = output[0]
             expected_class = output.argmax(dim=1).item()
         
         # Generate heatmap with automatic class selection
