@@ -25,9 +25,9 @@ class DummySpectralCNN(nn.Module):
         x = self.relu(self.conv2(x))
         x = self.gap(x)
         x = x.view(x.size(0), -1)
-        embedding = x  # Save embedding before final layer
+        embedding = x  # Save features before final layer
         logits = self.fc(x)
-        return logits, embedding  # Return tuple to match real model
+        return logits, embedding  # Return tuple (logits, features) to match real SpectralCNN model interface
 
 class NoConvModel(nn.Module):
     """A model with no Conv1d layers to test error handling."""
