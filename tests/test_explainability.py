@@ -131,7 +131,7 @@ class TestGradCAM1D(unittest.TestCase):
     def test_remove_hooks_api(self):
         """Test if the remove_hooks method actually removes all hooks."""
         grad_cam = GradCAM1D(self.model)
-        self.grad_cam_instances.append(grad_cam)
+        # Don't add to tracking list since we're explicitly testing cleanup
         grad_cam.remove_hooks()
         self.assertEqual(len(grad_cam.handles), 0, "Hooks were not properly removed")
 if __name__ == '__main__':
