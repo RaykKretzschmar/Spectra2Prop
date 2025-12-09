@@ -46,10 +46,19 @@ class TestGradCAM1D(unittest.TestCase):
         self.input_len = 100
         # Shape: (Batch=1, Channels=1, Length=100)
         self.input_tensor = torch.randn(1, 1, self.input_len, requires_grad=True)
+        # Track GradCAM instances for cleanup
+        self.grad_cam_instances = []
+
+    def tearDown(self):
+        """Clean up GradCAM hooks to prevent memory leaks."""
+        for grad_cam in self.grad_cam_instances:
+            grad_cam.remove_hooks()
+        self.grad_cam_instances = []
 
     def test_initialization_auto_layer(self):
         """Test if GradCAM automatically finds the last Conv1d layer."""
         grad_cam = GradCAM1D(self.model)
+        self.grad_cam_instances.append(grad_cam)
         
         # Should be an instance of Conv1d
         self.assertIsInstance(grad_cam.target_layer, nn.Conv1d)
@@ -59,6 +68,7 @@ class TestGradCAM1D(unittest.TestCase):
     def test_initialization_manual_layer(self):
         """Test if GradCAM accepts a user-specified layer."""
         grad_cam = GradCAM1D(self.model, target_layer=self.model.conv1)
+        self.grad_cam_instances.append(grad_cam)
         
         self.assertEqual(grad_cam.target_layer, self.model.conv1)
 
@@ -71,6 +81,7 @@ class TestGradCAM1D(unittest.TestCase):
     def test_heatmap_shape(self):
         """Test if the generated heatmap matches the input length."""
         grad_cam = GradCAM1D(self.model)
+        self.grad_cam_instances.append(grad_cam)
         heatmap = grad_cam.generate_heatmap(self.input_tensor, target_class_idx=0)
         
         # Check type
@@ -81,6 +92,7 @@ class TestGradCAM1D(unittest.TestCase):
     def test_heatmap_values_normalized(self):
         """Test if heatmap values are normalized between 0 and 1."""
         grad_cam = GradCAM1D(self.model)
+        self.grad_cam_instances.append(grad_cam)
         heatmap = grad_cam.generate_heatmap(self.input_tensor, normalize=True)
         
         self.assertGreaterEqual(heatmap.min(), 0.0)
@@ -90,6 +102,7 @@ class TestGradCAM1D(unittest.TestCase):
     def test_heatmap_automatic_class_selection(self):
         """Test if generate_heatmap works with target_class_idx=None (automatic selection)."""
         grad_cam = GradCAM1D(self.model)
+        self.grad_cam_instances.append(grad_cam)
         
         # Get model output to determine expected class
         with torch.no_grad():
@@ -111,12 +124,14 @@ class TestGradCAM1D(unittest.TestCase):
     def test_hooks_registration(self):
         """Test that hooks are registered correctly."""        
         grad_cam = GradCAM1D(self.model)
+        self.grad_cam_instances.append(grad_cam)
         self.assertEqual(len(grad_cam.handles), 2, "Expected exactly 2 hooks (forward and backward) to be registered")
 
 
     def test_remove_hooks_api(self):
         """Test if the remove_hooks method actually removes all hooks."""
         grad_cam = GradCAM1D(self.model)
+        # Don't add to tracking list since we're explicitly testing cleanup
         grad_cam.remove_hooks()
         self.assertEqual(len(grad_cam.handles), 0, "Hooks were not properly removed")
 if __name__ == '__main__':
