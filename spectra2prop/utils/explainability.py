@@ -1,7 +1,5 @@
 import torch
 import torch.nn.functional as F
-import numpy as np
-
 class GradCAM1D:
     """
     Implements 1D Grad-CAM (Gradient-weighted Class Activation Mapping) for
